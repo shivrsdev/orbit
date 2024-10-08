@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.50",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun run --watch src/index.ts",
+    "format": "bun prettier --write ."
+  },
+  "dependencies": {
+    "@prisma/client": "5.20.0",
+    "elysia": "latest"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "prettier": "^3.3.3",
+    "prisma": "^5.20.0"
+  },
+  "module": "src/index.js"
+}
