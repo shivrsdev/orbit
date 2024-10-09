@@ -1,6 +1,3 @@
-// /src/views/home.tsx
-// Home view
-
 import axios from "axios";
 import { Dispatch, StateUpdater, useEffect, useState } from "preact/hooks";
 
@@ -24,6 +21,7 @@ export function Home(props: { token: string, setView: Dispatch<StateUpdater<stri
             Authorization: props.token,
           },
         });
+
         setPosts(response.data);
       } catch (error) {
         console.error(error);
@@ -69,8 +67,8 @@ export function Home(props: { token: string, setView: Dispatch<StateUpdater<stri
         <h1 style="color: #00B478; padding: 20px;">orbit</h1>
       </header>
       <main>
-        <button style="margin-bottom: 20px; width: 100%;" onClick={() => props.setView("POST")}>Create post</button>
         <section className="posts">
+          <button style="margin-bottom: 20px; width: 100%;" onClick={() => props.setView("POST")}>Create post</button>
           {posts.length > 0 ? (
             posts.map((post) => (
               <article key={post.id} className="post">

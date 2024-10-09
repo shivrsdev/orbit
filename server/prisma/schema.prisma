@@ -17,6 +17,7 @@ model User {
   token String @unique
   posts Post[]
   likes Like[]
+  replies Reply[]
 }
 
 model Post {
@@ -26,6 +27,7 @@ model Post {
   author User @relation(fields: [authorId], references: [id])
   authorId Int
   likes Like[]
+  replies Reply[]
 }
 
 model Like {
@@ -34,4 +36,13 @@ model Like {
   userId Int
   post Post @relation(fields: [postId], references: [id])
   postId Int
+}
+
+model Reply {
+  id Int @id @default(autoincrement())
+  content String
+  post Post @relation(fields: [postId], references: [id])
+  postId Int
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
 }

@@ -39,6 +39,16 @@ export function Login(props: {
   };
 
   const signup = async () => {
+    if(password.length < 8) {
+      console.error('Password less than 8 characters');
+
+      setError('Password must be atleast 8 characters');
+
+      setTimeout(() => setError(""), 3000);
+
+      return;
+    }
+
     try {
       await axios.post("/auth/signup", {
         username: username,
@@ -50,6 +60,7 @@ export function Login(props: {
       setPassword("");
     } catch (error) {
       console.error(error);
+
       setError(
         "User already exists (if this keeps occuring, it may be an internal server error)"
       );

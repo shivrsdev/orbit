@@ -2,7 +2,7 @@
 // API request handler
 
 import Elysia, { t } from "elysia";
-import { createPost, getNewestPosts, getPost, likePost } from "../services/posts";
+import { createPost, getNewestPosts, getNewestRepliesOfPost, getPost, likePost, replyToPost } from "../services/posts";
 import { getUserByToken } from "../services/auth";
 
 export const apiHandler = new Elysia({ prefix: "/api" })
@@ -41,8 +41,13 @@ export const apiHandler = new Elysia({ prefix: "/api" })
     },
   )
   .get('/posts/:id', async ({ params, error }) => {
-    // Params.id represents the post id
-    return await getPost(params.id);
+    try {
+      // Params.id represents the post id
+      return await getPost(params.id);
+    } catch (err) {
+      console.error(err);
+      return error(500); // Internal server error
+    }
   }, {
     params: t.Object({
       id: t.Number()
@@ -74,4 +79,33 @@ export const apiHandler = new Elysia({ prefix: "/api" })
         id: t.Number(),
       }),
     },
-  );
+  )
+  .get('/posts/:id/replies/newest', async ({ params, error }) => {
+    try {
+      const replies = await getNewestRepliesOfPost(params.id);
+      return replies;
+    } catch (err) {
+      console.error(err);
+      return error(500); // Internal server error
+    }
+  }, {
+    params: t.Object({
+      id: t.Number()
+    })
+  })
+  .post('/posts/:id/replies', async ({ user, body, params, error }) => {
+    try {
+      await replyToPost(user.id, params.id, body.content);
+    } catch (err) {
+      console.error(err);
+
+      return error(500); // Internal server error
+    }
+  }, {
+    params: t.Object({
+      id: t.Number()
+    }),
+    body: t.Object({
+      content: t.String()
+    })
+  });
