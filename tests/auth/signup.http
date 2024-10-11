@@ -1,0 +1,10 @@
+// Should return nothing if succesful
+// If the password is less than 8 characters then it should give 422 (Malformed body)
+
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "username": "bob",
+    "password": "jjjjjjjj"
+}

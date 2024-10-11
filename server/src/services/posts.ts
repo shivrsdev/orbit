@@ -6,7 +6,7 @@ import { prisma } from "../database";
 export const createPost = async (
   userId: number,
   title: string,
-  content: string,
+  content: string
 ) => {
   await prisma.post.create({
     data: {
@@ -37,8 +37,8 @@ export const getNewestPosts = async (userId: number) => {
     posts.map(async (post) => {
       const user = await prisma.user.findFirst({
         where: {
-          id: post.authorId
-        }
+          id: post.authorId,
+        },
       });
 
       const likes = await prisma.like.findMany({
@@ -52,13 +52,13 @@ export const getNewestPosts = async (userId: number) => {
       const userLike = await prisma.like.findFirst({
         where: {
           user: {
-            id: userId
+            id: userId,
           },
           post: {
-            id: post.id
-          }
-        }
-      })
+            id: post.id,
+          },
+        },
+      });
 
       // Return everything inside posts, then the extra info
       // (using the ... spread operator to grab everything inside post)
@@ -66,33 +66,53 @@ export const getNewestPosts = async (userId: number) => {
         ...post,
         author: user?.username,
         likesCount: likes.length,
-        liked: userLike !== null
+        liked: userLike !== null,
       };
-    }),
+    })
   );
 
   return postsWithInfo;
 };
 
-export const getPost = async (postId: number) => {
+export const getPost = async (userId: number, postId: number) => {
   const post = await prisma.post.findFirst({
     where: {
       id: postId,
     },
   });
 
+  const user = await prisma.user.findFirst({
+    where: {
+      id: post?.authorId,
+    },
+  });
+
   const likes = await prisma.like.findMany({
     where: {
       post: {
-        id: postId,
+        id: post?.id,
       },
     },
   });
 
-  // Use spread operator (...) to get all the attributes of post and then add the likesCount
+  const userLike = await prisma.like.findFirst({
+    where: {
+      user: {
+        id: userId,
+      },
+      post: {
+        id: post?.id,
+      },
+    },
+  });
+
+  // Return everything inside posts, then the extra info
+  // (using the ... spread operator to grab everything inside post)
   return {
     ...post,
+    author: user?.username,
     likesCount: likes.length,
+    liked: userLike !== null,
   };
 };
 
@@ -100,17 +120,31 @@ export const getNewestRepliesOfPost = async (postId: number) => {
   const replies = await prisma.reply.findMany({
     where: {
       post: {
-        id: postId
-      }
+        id: postId,
+      },
     },
     take: 10,
     orderBy: {
-      id: 'desc'
-    }
+      id: "desc",
+    },
   });
 
-  return replies;
-}
+  // Wrap in Promise.all to use async when filtering replies
+  const repliesWithInfo = await Promise.all(replies.map(async (reply) => {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: reply.authorId
+      }
+    });
+
+    return {
+      ...reply,
+      author: user?.username
+    };
+  }));
+
+  return repliesWithInfo;
+};
 
 export const likePost = async (userId: number, postId: number) => {
   const like = await prisma.like.findFirst({
@@ -149,33 +183,37 @@ export const likePost = async (userId: number, postId: number) => {
   }
 };
 
-export const replyToPost = async (userId: number, postId: number, content: string) => {
+export const replyToPost = async (
+  userId: number,
+  postId: number,
+  content: string
+) => {
   const reply = await prisma.reply.create({
     data: {
       author: {
         connect: {
-          id: userId
-        }
+          id: userId,
+        },
       },
       post: {
         connect: {
-          id: postId
-        }
+          id: postId,
+        },
       },
-      content: content
-    }
-  })
+      content: content,
+    },
+  });
 
   await prisma.post.update({
     where: {
-      id: postId
+      id: postId,
     },
     data: {
       replies: {
         connect: {
-          id: reply.id
-        }
-      }
-    }
+          id: reply.id,
+        },
+      },
+    },
   });
-}
+};

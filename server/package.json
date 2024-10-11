@@ -7,6 +7,7 @@
     "format": "bun prettier --write ."
   },
   "dependencies": {
+    "@elysiajs/swagger": "^1.1.5",
     "@prisma/client": "5.20.0",
     "elysia": "latest"
   },

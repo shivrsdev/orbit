@@ -1,29 +1,23 @@
 // /src/main.tsx
-// Entry point to frontend
+// Entry point
 
-import { render } from "preact";
-import { useState } from "preact/hooks";
-import { Login } from "./views/login";
-import { Home } from "./views/home";
-import { Post } from "./views/post";
+import { render } from 'preact'
+import { Context } from './context';
+import { Login } from './components/login';
+import { Home } from './components/home';
+import { CreatePost } from './components/createPost';
+import { Post } from './components/post';
 
 function App() {
-  const [view, setView] = useState("LOGIN");
-  const [token, setToken] = useState("");
+    const context = new Context();
 
-  return (
-    <main className="container">
-      {view === "LOGIN" ? (
-        <Login setView={setView} setToken={setToken} />
-      ) : view === "HOME" ? (
-        <Home setView={setView} token={token} />
-      ) : view === "POST" ? (
-        <Post setView={setView} token={token}/>
-      ) : (
-        <p>You are in the wrong place!</p>
-      )}
-    </main>
-  );
+    return(
+        context.page === 'LOGIN' ? <Login context={context} />
+        : context.page === 'HOME' ? <Home context={context} />
+        : context.page === 'CREATE_POST' ? <CreatePost context={context} />
+        : context.page === 'POST' ? <Post context={context} />
+        : <h1>{context.page} doesn't exist.</h1>
+    )
 }
 
-render(<App />, document.getElementById("app")!);
+render(<App />, document.getElementById('app')!)

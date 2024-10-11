@@ -1,0 +1,12 @@
+// Create reply
+// 401 if unauthorized
+// Make sure to specify the post id (in the url)
+
+// Replace 1 with post id (1 is valid though)
+POST http://localhost:3000/api/posts/1/replies
+Content-Type: application/json
+Authorization: $argon2id$v=19$m=65536,t=2,p=1$zUBBJnRv1du0w5vr2WMzin2ZEY5GtIT+1OW4ICU9RLY$lyH82UxzB9uIrfV81hvr3k6pnhnRzEg9I06CrO3zLEc
+
+{
+    "content": "Welcome to my app!~"
+}

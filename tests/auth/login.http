@@ -1,0 +1,10 @@
+// Should return json containing the token if the user exists
+// If the user doens't exist it should return "Unauthorized"
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "bob",
+    "password": "jjjjjjjj"
+}
