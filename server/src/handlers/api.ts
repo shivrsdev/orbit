@@ -5,11 +5,10 @@ import Elysia, { t } from "elysia";
 import {
   createPost,
   getNewestPosts,
-  getNewestRepliesOfPost,
   getPost,
   likePost,
-  replyToPost,
 } from "../services/posts";
+import { getNewestRepliesOfPost, replyToPost } from "../services/replies";
 import { getUserByToken } from "../services/auth";
 
 export const apiHandler = new Elysia({ prefix: "/api" })
@@ -45,7 +44,7 @@ export const apiHandler = new Elysia({ prefix: "/api" })
           maxLength: 69,
         }),
       }),
-    },
+    }
   )
   .get(
     "/posts/:id",
@@ -62,7 +61,7 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       params: t.Object({
         id: t.Number(),
       }),
-    },
+    }
   )
   .get("/posts/newest", async ({ user, error }) => {
     try {
@@ -89,7 +88,7 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       params: t.Object({
         id: t.Number(),
       }),
-    },
+    }
   )
   .get(
     "/posts/:id/replies/newest",
@@ -106,7 +105,7 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       params: t.Object({
         id: t.Number(),
       }),
-    },
+    }
   )
   .post(
     "/posts/:id/replies",
@@ -126,5 +125,5 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       body: t.Object({
         content: t.String(),
       }),
-    },
+    }
   );
