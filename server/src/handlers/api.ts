@@ -4,6 +4,7 @@
 import Elysia, { t } from "elysia";
 import {
   createPost,
+  deletePost,
   getNewestPosts,
   getPost,
   likePost,
@@ -44,7 +45,7 @@ export const apiHandler = new Elysia({ prefix: "/api" })
           maxLength: 69,
         }),
       }),
-    }
+    },
   )
   .get(
     "/posts/:id",
@@ -61,8 +62,20 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       params: t.Object({
         id: t.Number(),
       }),
-    }
+    },
   )
+  .delete("/posts/:id", async ({ user, params, error }) => {
+    try {
+      await deletePost(user.id, params.id);
+    } catch (err) {
+      console.error(err);
+      return error(500); // Internal server error
+    }
+  }, {
+    params: t.Object({
+      id: t.Number()
+    })
+  })
   .get("/posts/newest", async ({ user, error }) => {
     try {
       const posts = await getNewestPosts(user.id);
@@ -88,7 +101,7 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       params: t.Object({
         id: t.Number(),
       }),
-    }
+    },
   )
   .get(
     "/posts/:id/replies/newest",
@@ -105,7 +118,7 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       params: t.Object({
         id: t.Number(),
       }),
-    }
+    },
   )
   .post(
     "/posts/:id/replies",
@@ -125,5 +138,5 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       body: t.Object({
         content: t.String(),
       }),
-    }
-  );
+    },
+  )

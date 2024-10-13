@@ -10,7 +10,7 @@ import { Reply } from "../models/reply";
 export function Post(props: { context: Context }) {
   const [post, setPost] = useState<PostModel>();
   const [replies, setReplies] = useState<Reply[]>([]);
-  const [replyContent, setReplyContent] = useState('');
+  const [replyContent, setReplyContent] = useState("");
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -66,16 +66,30 @@ export function Post(props: { context: Context }) {
   };
 
   const reply = async () => {
-    await axios.post(`/api/posts/${post?.id}/replies`, {
-      content: replyContent
-    }, {
-      headers: {
-        Authorization: props.context.token
+    await axios.post(
+      `/api/posts/${post?.id}/replies`,
+      {
+        content: replyContent,
+      },
+      {
+        headers: {
+          Authorization: props.context.token,
+        },
       }
-    });
+    );
 
     setReplyContent("");
-  }
+  };
+
+  const deletePost = async () => {
+    await axios.delete(`/api/posts/${post?.id}`, {
+      headers: {
+        Authorization: props.context.token,
+      },
+    });
+
+    props.context.setPage("HOME");
+  };
 
   return (
     <main className="container">
@@ -88,6 +102,7 @@ export function Post(props: { context: Context }) {
               value="Return"
               onClick={() => props.context.setPage("HOME")}
             />
+            <input class="secondary" type="button" value="Delete" onClick={deletePost} />
             <article>
               <h3>{post?.title}</h3>
               <p>{post?.author}</p>
@@ -107,7 +122,9 @@ export function Post(props: { context: Context }) {
                 ) : (
                   replies.map((reply) => (
                     <div className="reply">
-                      <h4>{reply.author} - {reply.content}</h4>
+                      <h4>
+                        {reply.author} - {reply.content}
+                      </h4>
                     </div>
                   ))
                 )}
@@ -117,7 +134,9 @@ export function Post(props: { context: Context }) {
                       type="text"
                       name="content"
                       placeholder="What's on your mind?"
-                      onChange={event => setReplyContent(event.currentTarget.value)}
+                      onChange={(event) =>
+                        setReplyContent(event.currentTarget.value)
+                      }
                       value={replyContent}
                     />
                     <input type="button" value="Reply" onClick={reply} />

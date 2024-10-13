@@ -29,7 +29,7 @@ export const getNewestRepliesOfPost = async (postId: number) => {
         ...reply,
         author: user?.username,
       };
-    })
+    }),
   );
 
   return repliesWithInfo;
@@ -38,7 +38,7 @@ export const getNewestRepliesOfPost = async (postId: number) => {
 export const replyToPost = async (
   userId: number,
   postId: number,
-  content: string
+  content: string,
 ) => {
   const reply = await prisma.reply.create({
     data: {

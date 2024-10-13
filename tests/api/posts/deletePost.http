@@ -1,6 +1,6 @@
-// Get newest posts
-// 401 if Unauthorized
+// Delete post
+// 401 if unauthorized
 
-GET http://localhost:3000/api/posts/newest
-Content-Type: application/json
+// Replace 9 with your post id
+DELETE http://localhost:3000/api/posts/9
 Authorization: $argon2id$v=19$m=65536,t=2,p=1$liouN0uS6MchCLgHGi4NkFXGp/2eHZbEA5lPBQDtNPo$nAhf9SqZGbk3OpOxKAb1kuviOBrylsOOuDUBA5lCf1w

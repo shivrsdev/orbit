@@ -6,7 +6,7 @@ import { prisma } from "../database";
 export const createPost = async (
   userId: number,
   title: string,
-  content: string
+  content: string,
 ) => {
   await prisma.post.create({
     data: {
@@ -68,7 +68,7 @@ export const getNewestPosts = async (userId: number) => {
         likesCount: likes.length,
         liked: userLike !== null,
       };
-    })
+    }),
   );
 
   return postsWithInfo;
@@ -115,6 +115,17 @@ export const getPost = async (userId: number, postId: number) => {
     liked: userLike !== null,
   };
 };
+
+export const deletePost = async (userId: number, postId: number) => {
+  await prisma.post.delete({
+    where: {
+      id: postId,
+      author: {
+        id: userId
+      }
+    }
+  })
+}
 
 export const likePost = async (userId: number, postId: number) => {
   const like = await prisma.like.findFirst({
