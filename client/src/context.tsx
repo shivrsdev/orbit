@@ -10,6 +10,9 @@ interface Data {
 export class Context {
     token: string;
     setToken: Dispatch<StateUpdater<string>>;
+    
+    userId: number;
+    setUserId: Dispatch<StateUpdater<number>>;
 
     page: string;
     setPage: Dispatch<StateUpdater<string>>;
@@ -19,6 +22,7 @@ export class Context {
 
     constructor() {
         [this.token, this.setToken] = useState('');
+        [this.userId, this.setUserId] = useState(0);
         [this.page,  this.setPage] = useState('LOGIN');
         [this.data, this.setData] = useState({ postId: 0 });
     }

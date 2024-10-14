@@ -102,7 +102,14 @@ export function Post(props: { context: Context }) {
               value="Return"
               onClick={() => props.context.setPage("HOME")}
             />
-            <input class="secondary" type="button" value="Delete" onClick={deletePost} />
+            {post.authorId === props.context.userId && (
+              <input
+                class="secondary"
+                type="button"
+                value="Delete"
+                onClick={deletePost}
+              />
+            )}
             <article>
               <h3>{post?.title}</h3>
               <p>{post?.author}</p>
@@ -121,10 +128,36 @@ export function Post(props: { context: Context }) {
                   <h3>Be the first to reply!</h3>
                 ) : (
                   replies.map((reply) => (
-                    <div className="reply">
+                    <div
+                      className="reply"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        marginBottom: '10px'
+                      }}
+                    >
                       <h4>
                         {reply.author} - {reply.content}
                       </h4>
+                      { props.context.userId === reply.authorId &&
+                      <button
+                        onClick={async () => {
+                          await axios.delete(
+                            `/api/posts/${post.id}/replies/${reply.id}`,
+                            {
+                              headers: {
+                                Authorization: props.context.token,
+                              },
+                            }
+                          );
+
+                          setReplies(replies.filter((n) => n.id !== reply.id));
+                        }}
+                      >
+                      👈 Delete
+                      </button>
+}
                     </div>
                   ))
                 )}

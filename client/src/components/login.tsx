@@ -22,8 +22,10 @@ export function Login(props: { context: Context }) {
                 password: password
             });
 
-            if(response.data.token)
+            if(response.data.token) {
                 props.context.setToken(response.data.token);
+                props.context.setUserId(response.data.userId);
+            }
 
             setUsername("");
             setPassword("");

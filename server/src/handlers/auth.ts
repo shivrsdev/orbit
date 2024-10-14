@@ -45,7 +45,7 @@ export const authHandler = new Elysia({ prefix: "/auth" })
             user.password,
           );
 
-          return authorized ? { token: user.token } : error(401); // Give token if authorized, else give error 401
+          return authorized ? { token: user.token, userId: user.id } : error(401); // Give token if authorized, else give error 401
         }
       } catch (err) {
         console.log(err);
