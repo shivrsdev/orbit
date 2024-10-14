@@ -9,7 +9,7 @@ import {
   getPost,
   likePost,
 } from "../services/posts";
-import { getNewestRepliesOfPost, replyToPost } from "../services/replies";
+import { deleteReply, getNewestRepliesOfPost, replyToPost } from "../services/replies";
 import { getUserByToken } from "../services/auth";
 
 export const apiHandler = new Elysia({ prefix: "/api" })
@@ -137,6 +137,24 @@ export const apiHandler = new Elysia({ prefix: "/api" })
       }),
       body: t.Object({
         content: t.String(),
+      }),
+    },
+  )
+  .delete(
+    "/posts/:id/replies/:replyId",
+    async ({ user, params, error }) => {
+      try {
+        await deleteReply(user.id, params.id, params.replyId);
+      } catch (err) {
+        console.error(err);
+
+        return error(500); // Internal server error
+      }
+    },
+    {
+      params: t.Object({
+        id: t.Number(),
+        replyId: t.Number()
       }),
     },
   )

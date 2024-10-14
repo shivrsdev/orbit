@@ -2,10 +2,10 @@
 // 401 if unauthorized
 // Make sure to specify the post id (in the url)
 
-// Replace 9 with post id
-POST http://localhost:3000/api/posts/9/replies
+// Replace 1 with post id
+POST http://localhost:3000/api/posts/1/replies
 Content-Type: application/json
-Authorization: $argon2id$v=19$m=65536,t=2,p=1$liouN0uS6MchCLgHGi4NkFXGp/2eHZbEA5lPBQDtNPo$nAhf9SqZGbk3OpOxKAb1kuviOBrylsOOuDUBA5lCf1w
+Authorization: $argon2id$v=19$m=65536,t=2,p=1$NtYxdZbdJVMRnHeSmPtFAz24GztKHgMiViiTvSKbLLc$zqmP49Jm3iquvsd4CALfqiRAoHwDNv2tdl3btdNDUFM
 
 {
     "content": "Welcome to my app!~"

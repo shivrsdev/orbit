@@ -1,0 +1,6 @@
+// Delete post reply
+// 401 if unauthorized
+
+// Replace 1 with your post id and reply id
+DELETE http://localhost:3000/api/posts/1/replies/1
+Authorization: $argon2id$v=19$m=65536,t=2,p=1$NtYxdZbdJVMRnHeSmPtFAz24GztKHgMiViiTvSKbLLc$zqmP49Jm3iquvsd4CALfqiRAoHwDNv2tdl3btdNDUFM

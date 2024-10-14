@@ -69,3 +69,21 @@ export const replyToPost = async (
     },
   });
 };
+
+export const deleteReply = async (
+  userId: number,
+  postId: number,
+  replyId: number
+) => {
+  await prisma.reply.delete({
+    where: {
+      id: replyId,
+      author: {
+        id: userId
+      },
+      post: {
+        id: postId
+      }
+    }
+  });
+}
