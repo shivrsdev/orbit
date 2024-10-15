@@ -11,6 +11,7 @@ export function Post(props: { context: Context }) {
   const [post, setPost] = useState<PostModel>();
   const [replies, setReplies] = useState<Reply[]>([]);
   const [replyContent, setReplyContent] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -66,6 +67,11 @@ export function Post(props: { context: Context }) {
   };
 
   const reply = async () => {
+    if (replyContent.length === 0 || replyContent.length > 69) {
+      setError("Reply content must be filled and less than 70 characters");
+      return;
+    }
+
     await axios.post(
       `/api/posts/${post?.id}/replies`,
       {
@@ -123,6 +129,7 @@ export function Post(props: { context: Context }) {
               </button>
             </article>
             <div className="replies">
+              <p style="color: #E23F44;">{error}</p>
               <article>
                 {replies.length === 0 ? (
                   <h3>Be the first to reply!</h3>
@@ -134,34 +141,36 @@ export function Post(props: { context: Context }) {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "flex-start",
-                        marginBottom: '10px'
+                        marginBottom: "10px",
                       }}
                     >
                       <h4>
                         {reply.author} - {reply.content}
                       </h4>
-                      { props.context.userId === reply.authorId &&
-                      <button
-                        onClick={async () => {
-                          await axios.delete(
-                            `/api/posts/${post.id}/replies/${reply.id}`,
-                            {
-                              headers: {
-                                Authorization: props.context.token,
-                              },
-                            }
-                          );
+                      {props.context.userId === reply.authorId && (
+                        <button
+                          onClick={async () => {
+                            await axios.delete(
+                              `/api/posts/${post.id}/replies/${reply.id}`,
+                              {
+                                headers: {
+                                  Authorization: props.context.token,
+                                },
+                              }
+                            );
 
-                          setReplies(replies.filter((n) => n.id !== reply.id));
-                        }}
-                      >
-                      👈 Delete
-                      </button>
-}
+                            setReplies(
+                              replies.filter((n) => n.id !== reply.id)
+                            );
+                          }}
+                        >
+                          👈 Delete
+                        </button>
+                      )}
                     </div>
                   ))
                 )}
-                <form action="">
+                <form onSubmit={(event: Event) => event.preventDefault()}>
                   <fieldset role="group">
                     <input
                       type="text"

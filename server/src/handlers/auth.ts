@@ -20,7 +20,7 @@ export const authHandler = new Elysia({ prefix: "/auth" })
     {
       body: t.Object({
         username: t.String({
-          maxLength: 20,
+          minLength: 1
         }),
         password: t.String({
           minLength: 8,
@@ -54,9 +54,12 @@ export const authHandler = new Elysia({ prefix: "/auth" })
     },
     {
       body: t.Object({
-        username: t.String(),
+        username: t.String({
+          minLength: 1
+        }),
         password: t.String({
           minLength: 8,
+          maxLength: 30
         }),
       }),
     },

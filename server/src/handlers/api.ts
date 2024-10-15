@@ -39,9 +39,11 @@ export const apiHandler = new Elysia({ prefix: "/api" })
     {
       body: t.Object({
         title: t.String({
+          minLength: 1,
           maxLength: 30,
         }),
         content: t.String({
+          minLength: 1,
           maxLength: 69,
         }),
       }),
@@ -136,7 +138,10 @@ export const apiHandler = new Elysia({ prefix: "/api" })
         id: t.Number(),
       }),
       body: t.Object({
-        content: t.String(),
+        content: t.String({
+          minLength: 1,
+          maxLength: 69
+        }),
       }),
     },
   )
